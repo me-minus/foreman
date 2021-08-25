@@ -2,22 +2,31 @@
   <div class="col-md-6 classes">
     <% group.each do |list| %>
       <% next if list.nil? %>
-      <ul class="puppetclass_group">
-        <li><%= puppetclass_group_with_icon(list, selected_puppet_classes) %>
-          <ul id="pc_<%= list.first %>" style="display: none;">
-            <% for klass in list.last.sort %>
-              <% unless authorized_for(:controller => :host_editing, :action => :edit_classes) %>
-                <li data-original-title="<%= _('Not authorized to edit classes') %>" rel="twipsy"><%= h klass.name %></li>
-              <% else %>
-                <% style = selected_puppet_classes.include?(klass) ? "hide" : "" %>
-                <%= content_tag_for :li, klass, :class=> style do %>
-                  <%= link_to_add_puppetclass(klass, type) %>
+      <div class="panel-group paneless" id="<%= list.first %>-avail-classes" style="margin-bottom: 1px;">
+        <div class="panel-heading" style="padding-top: 2px; padding-bottom: 2px;">
+          <p class="panel-title">
+            <a data-toggle="collapse" data-parent="#<%= list.first %>-avail-classes" href="#<%= list.first %>-avail-classes-list" class="collapsed">
+              <%= h list.first %>
+            </a>
+          </p>
+        </div>
+        <div id="<%= list.first %>-avail-classes-list" class="panel-collapse collapse">
+          <div class="panel-body">
+            <ul style="margin-bottom: 1px;">
+              <% for klass in list.last.sort %>
+                <% unless authorized_for(:controller => :host_editing, :action => :edit_classes) %>
+                  <li data-original-title="<%= _('Not authorized to edit classes') %>" rel="twipsy"><%= h klass.name %></li>
+                <% else %>
+                  <% style = selected_puppet_classes.include?(klass) ? "hide" : "" %>
+                  <%= content_tag_for :li, klass, :class=> style do %>
+                    <%= link_to_add_puppetclass(klass, type) %>
+                  <% end %>
                 <% end %>
               <% end %>
-            <% end %>
-          </ul>
-        </li>
-      </ul>
+            </ul>
+          </div>
+        </div>
+      </div>
     <% end %>
   </div>
 <% end %>
