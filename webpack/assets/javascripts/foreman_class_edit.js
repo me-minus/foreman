@@ -21,15 +21,23 @@ export function filterPuppetClasses(item) {
     .val()
     .trim();
   const classElems = $('.available_classes').find(
-    '.puppetclass_group, .puppetclass'
+    '.panel-group, .puppetclass'
   );
   if (term.length > 0) {
-    classElems
+    const found=classElems
       .hide()
-      .has(`[data-class-name*="${term}"]`)
-      .show();
+      .has(`[data-class-name*="${term}"]`);
+    found.show();
+    found.has('.panel-title')
+      .find('a.collapsed')
+      .attr('aria-expanded','true')
+      .click();
   } else {
     classElems.show();
+    classElems.has('.collapse')
+              .find('a[aria-expanded]')
+              .attr('aria-expanded','false')
+              .click();
   }
 }
 
